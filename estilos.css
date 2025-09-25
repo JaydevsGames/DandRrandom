@@ -1,0 +1,117 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:'Arial Narrow Bold', sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom, #350013, #0e000d);
+    color: #fdf4cc;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    text-align: center;
+    box-shadow: #0e000d 0px 4px 8px ;
+    padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid #ae0189;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.objetos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.objeto {
+    background-color: #3d0427;
+    color: #f5e6c8;
+    border: 2px solid #f5e6c8;
+    box-shadow: #0e000d 5px 1px 5px;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.objeto:hover {
+    transform: scale(1.1);
+    background-color: #a949b4;
+}
+
+.resultado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dado-container {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
+}
+
+#dado {
+    width: 100%;
+    height: 100%;
+    display: none;
+    animation: girar 1s ease-in-out forwards;
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(720deg); }
+}
+
+.loot {
+    font-size: 1.2rem;
+    text-align: center;
+    min-height: 2rem;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    box-shadow: #0e000d 0px 4px 8px    ;
+    padding: 1rem;
+    border-top: 2px solid #f5e6c8;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .objetos {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .objeto {
+        width: 80%;
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
+}

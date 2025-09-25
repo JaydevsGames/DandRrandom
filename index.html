@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loot de D&D</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <header>
+        <h1>D&RANDOM</h1>
+        <p>Selecciona un objeto y descubre qué tesoro escondido te espera.</p>
+    </header>
+
+    <main>
+        <section class="objetos">
+            <button class="objeto" data-tipo="cofre">Cofre</button>
+            <button class="objeto" data-tipo="alacena">Alacena</button>
+            <button class="objeto" data-tipo="armario">Armario</button>
+            <button class="objeto" data-tipo="mesa">Mesa</button>
+        </section>
+
+        <section class="resultado">
+            <div class="dado-container">
+                <img id="dado" src="img/1d20logo.png" alt="Dado" />
+            </div>
+            <div id="loot" class="loot"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Hecho con ❤️ para partidas de D&D</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
