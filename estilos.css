@@ -1,117 +1,114 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family:'Arial Narrow Bold', sans-serif;
-}
-
 body {
-    background: linear-gradient(to bottom, #350013, #0e000d);
-    color: #fdf4cc;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-header {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #fff;
     text-align: center;
-    box-shadow: #0e000d 0px 4px 8px ;
-    padding: 2rem;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-bottom: 2px solid #ae0189;
+    padding: 20px;
 }
 
-h1 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-p {
-    font-size: 1rem;
-}
-
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-}
-
-.objetos {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-.objeto {
-    background-color: #3d0427;
-    color: #f5e6c8;
-    border: 2px solid #f5e6c8;
-    box-shadow: #0e000d 5px 1px 5px;
-    padding: 1rem 2rem;
-    font-size: 1rem;
-    border-radius: 0.5rem;
+button.objeto {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 1.2em;
     cursor: pointer;
-    transition: transform 0.2s, background-color 0.2s;
+    border: 2px solid #5f0059;
+    border-radius: 8px;
+    background: #333;
+    color: white;
+    transition: background 0.3s;
 }
 
-.objeto:hover {
-    transform: scale(1.1);
-    background-color: #a949b4;
-}
-
-.resultado {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.dado-container {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 1rem;
+button.objeto:hover {
+    background: #7c0063
+    
 }
 
 #dado {
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    margin: 20px auto;
     display: none;
-    animation: girar 1s ease-in-out forwards;
 }
 
 @keyframes girar {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(720deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(720deg); }
 }
 
-.loot {
-    font-size: 1.2rem;
+#loot {
+    margin-top: 20px;
+    white-space: pre-line;
+    font-size: 1.1em;
+}
+
+/* Estilo especial para el nombre del loot */
+.loot-nombre {
+    font-size: 1.1em;              
+    font-weight: bold;
+    color: #ffdf5e;                
+    text-shadow: 0 0 5px #ffcc00, 0 0 10px #ffaa00;
+    animation: parpadeo 1.5s infinite alternate;
+}
+
+.loot-nombre {
+    font-size: 1.8em;
+    font-weight: bold;
+    animation: parpadeo 1.5s infinite alternate;
+}
+
+/* RAREZAS */
+.loot-nombre.comun {
+    color: #3cff3c; /* Verde */
+    text-shadow: 0 0 5px #1a8a1a, 0 0 10px #2fff2f;
+}
+
+.loot-nombre.poco-comun {
+    color: #3ca9ff; /* Azul */
+    text-shadow: 0 0 5px #1a4a8a, 0 0 10px #4fb9ff;
+}
+
+.loot-nombre.raro {
+    color: #c93cff; /* Morado */
+    text-shadow: 0 0 5px #6a1a8a, 0 0 10px #d94fff;
+}
+
+.loot-nombre.muy-raro {
+    color: #ff3c3c; /* Rojo */
+    text-shadow: 0 0 5px #8a1a1a, 0 0 10px #ff4f4f;
+}
+
+.loot-nombre.otro {
+    color: #ffdf5e; /* Amarillo dorado para legendario u otros */
+    text-shadow: 0 0 5px #ffcc00, 0 0 10px #ffaa00;
+}
+
+/* Animación de parpadeo */
+@keyframes parpadeo {
+    from { opacity: 1; }
+    to { opacity: 0.7; }
+}
+
+
+
+
+
+
+
+
+@keyframes parpadeo {
+    from { opacity: 1; }
+    to { opacity: 0.7; }
+}
+
+footer.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    padding: 10px;
+    background: #1e1e1e;
+    border-top: 2px solid #5f0059;
+    font-size: 0.9em;
+    color: #bbb;
     text-align: center;
-    min-height: 2rem;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    box-shadow: #0e000d 0px 4px 8px    ;
-    padding: 1rem;
-    border-top: 2px solid #f5e6c8;
-}
-
-/* Responsivo */
-@media (max-width: 600px) {
-    .objetos {
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .objeto {
-        width: 80%;
-        padding: 1rem;
-        font-size: 1.1rem;
-    }
 }

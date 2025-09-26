@@ -82,7 +82,7 @@ botones.forEach(boton => {
 });
 
 function mostrarDadoYLoot(tipo) {
-    lootDiv.textContent = "";
+    lootDiv.innerHTML = "";
     dadoImg.style.display = "block";
     dadoImg.src = "img/1d20logo.png"; // Imagen del dado
 
@@ -99,21 +99,46 @@ function mostrarDadoYLoot(tipo) {
         // Si es función, ejecutarla
         if (typeof loot === "function") loot = loot();
 
-        // Si es objeto con stats
-        if (typeof loot === "object") {
-            let texto = `¡Has encontrado: ${loot.nombre}!`;
-            if (loot.tipo) texto += `\nTipo: ${loot.tipo}`;
-            if (loot.raridad) texto += `\nRaridad: ${loot.raridad}`;
-            if (loot.bono) texto += `\nBono: ${loot.bono}`;
-            if (loot.efecto) texto += `\nEfecto: ${loot.efecto}`;
-            if (loot.daño) texto += `\nDaño: ${loot.daño}`;
-            if (loot.propiedades) texto += `\nPropiedades: ${loot.propiedades}`;
-            if (loot.CA) texto += `\nCA: ${loot.CA}`;
-            if (loot.nivel) texto += `\nNivel de conjuro: ${loot.nivel}`;
-            lootDiv.textContent = texto;
-        } else {
-            lootDiv.textContent = `¡Has encontrado: ${loot}!`;
+        // Mostrar loot
+       // Mostrar loot
+if (typeof loot === "object") {
+    // Determinar clase de rareza
+    let claseRaridad = "";
+    if (loot.raridad) {
+        switch (loot.raridad.toLowerCase()) {
+            case "común":
+                claseRaridad = "comun";
+                break;
+            case "poco común":
+                claseRaridad = "poco-comun";
+                break;
+            case "raro":
+                claseRaridad = "raro";
+                break;
+            case "muy raro":
+                claseRaridad = "muy-raro";
+                break;
+            default:
+                claseRaridad = "otro";
         }
+    }
+
+    let nombreHTML = `<span class="loot-nombre ${claseRaridad}">${loot.nombre}</span>`;
+    let detalles = "";
+
+    if (loot.tipo) detalles += `<br>Tipo: ${loot.tipo}`;
+    if (loot.raridad) detalles += `<br>Raridad: ${loot.raridad}`;
+    if (loot.bono) detalles += `<br>Bono: ${loot.bono}`;
+    if (loot.efecto) detalles += `<br>Efecto: ${loot.efecto}`;
+    if (loot.daño) detalles += `<br>Daño: ${loot.daño}`;
+    if (loot.propiedades) detalles += `<br>Propiedades: ${loot.propiedades}`;
+    if (loot.CA) detalles += `<br>CA: ${loot.CA}`;
+    if (loot.nivel) detalles += `<br>Nivel de conjuro: ${loot.nivel}`;
+
+    lootDiv.innerHTML = `¡Has encontrado: ${nombreHTML}!<br>${detalles}`;
+} else {
+    lootDiv.innerHTML = `¡Has encontrado: <span class="loot-nombre comun">${loot}</span>!`;
+}
 
         dadoImg.style.display = "none";
     }, 1000); // duración de la animación
