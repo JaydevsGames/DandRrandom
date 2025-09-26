@@ -1,71 +1,71 @@
-// Loot ampliado y aleatorio por tipo de objeto
+// Loot ampliado y aleatorio por tipo de objeto (con stats)
 const lootPorObjeto = {
     cofre: [
-        "Espada +1",
-        "Espada larga +2",
-        "Espada corta encantada",
-        "Hacha de batalla",
-        "Maza de acero",
-        "Anillo de invisibilidad",
-        "Anillo de protección",
-        "Amuleto de salud",
-        "Pergamino de fuego",
-        "Pergamino de teletransportación",
-        "Poción de fuerza",
-        "Capa de resistencia",
-        () => `${Math.floor(Math.random() * 201) + 50} monedas de oro`, // 50-250 oro
-        () => `${Math.floor(Math.random() * 101) + 50} gemas preciosas`, // 50-150 gemas
-        "Botella de elixir de vida",
-        "Escudo mágico",
-        "Collar de sabiduría"
+        { nombre: "Espada +1", tipo: "Arma (espada larga)", raridad: "Poco común", bono: "+1 a tiradas de ataque y daño" },
+        { nombre: "Espada larga +2", tipo: "Arma (espada larga)", raridad: "Raro", bono: "+2 a tiradas de ataque y daño" },
+        { nombre: "Espada corta encantada", tipo: "Arma (espada corta)", raridad: "Poco común", bono: "+1 a ataque", efecto: "Brilla en la oscuridad (6m)" },
+        { nombre: "Hacha de batalla", tipo: "Arma marcial", daño: "1d8 cortante", propiedades: "Versátil (1d10)", raridad: "Común" },
+        { nombre: "Maza de acero", tipo: "Arma simple", daño: "1d6 contundente", raridad: "Común" },
+        { nombre: "Anillo de invisibilidad", tipo: "Objeto maravilloso", raridad: "Legendario", efecto: "Otorga invisibilidad hasta que se ataque o lance un conjuro" },
+        { nombre: "Anillo de protección", tipo: "Objeto maravilloso", raridad: "Raro", bono: "+1 a CA y salvaciones" },
+        { nombre: "Amuleto de salud", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Fija la Constitución del portador en 19" },
+        { nombre: "Pergamino de fuego", tipo: "Conjuro (Bola de Fuego)", nivel: 3, raridad: "Poco común" },
+        { nombre: "Pergamino de teletransportación", tipo: "Conjuro (Teleport)", nivel: 7, raridad: "Muy raro" },
+        { nombre: "Poción de fuerza", tipo: "Poción", raridad: "Raro", efecto: "Aumenta la Fuerza a 21 por 1 hora" },
+        { nombre: "Capa de resistencia", tipo: "Objeto maravilloso", raridad: "Poco común", bono: "+1 a salvaciones" },
+        () => ({ nombre: `${Math.floor(Math.random() * 201) + 50} monedas de oro`, tipo: "Tesoro" }),
+        () => ({ nombre: `${Math.floor(Math.random() * 101) + 50} gemas preciosas`, tipo: "Tesoro" }),
+        { nombre: "Botella de elixir de vida", tipo: "Poción", raridad: "Muy raro", efecto: "Restaura 50 PV al beber" },
+        { nombre: "Escudo mágico", tipo: "Escudo", raridad: "Poco común", bono: "+1 a CA" },
+        { nombre: "Collar de sabiduría", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "+2 a Sabiduría mientras se lleve" }
     ],
     alacena: [
-        "Pan mágico",
-        "Poción de curación",
-        "Poción de invisibilidad",
-        "Poción de velocidad",
-        "Llave antigua",
-        "Mapa del tesoro",
-        "Frasco de aceite sagrado",
-        "Hierbas curativas",
-        "Botella de vino elfico",
-        "Pergamino antiguo",
-        () => `${Math.floor(Math.random() * 51) + 10} monedas de oro`, // 10-60 oro
-        "Frasco de veneno",
-        "Polvo de sueño",
-        "Set de componentes mágicos"
+        { nombre: "Pan mágico", tipo: "Comida", efecto: "Recupera 1d6 PV" },
+        { nombre: "Poción de curación", tipo: "Poción", efecto: "Cura 2d4+2 PV" },
+        { nombre: "Poción de invisibilidad", tipo: "Poción", raridad: "Raro", efecto: "Invisibilidad 1h o hasta atacar" },
+        { nombre: "Poción de velocidad", tipo: "Poción", raridad: "Muy raro", efecto: "Duplica velocidad, +2 CA, ventaja en DEX por 1 min" },
+        { nombre: "Llave antigua", tipo: "Objeto", efecto: "Abre un cofre olvidado" },
+        { nombre: "Mapa del tesoro", tipo: "Objeto", efecto: "Señala una localización secreta" },
+        { nombre: "Frasco de aceite sagrado", tipo: "Consumible", efecto: "Inflige 2d6 radiante a no-muertos" },
+        { nombre: "Hierbas curativas", tipo: "Consumible", efecto: "Cura 1d4 PV" },
+        { nombre: "Botella de vino élfico", tipo: "Objeto", efecto: "Valioso, puede venderse (25 po)" },
+        { nombre: "Pergamino antiguo", tipo: "Objeto", efecto: "Contiene un conjuro menor aleatorio" },
+        () => ({ nombre: `${Math.floor(Math.random() * 51) + 10} monedas de oro`, tipo: "Tesoro" }),
+        { nombre: "Frasco de veneno", tipo: "Consumible", efecto: "Añadir al arma: 1d4 veneno" },
+        { nombre: "Polvo de sueño", tipo: "Consumible", efecto: "Induce sueño (CD 13)" },
+        { nombre: "Set de componentes mágicos", tipo: "Objeto", efecto: "Útil para lanzar conjuros" }
     ],
     armario: [
-        "Capa de sigilo",
-        "Capa de resistencia al fuego",
-        "Botas de velocidad",
-        "Botas de sigilo",
-        "Guantes encantados",
-        "Guantes de fuerza",
-        "Sombrero del sabio",
-        "Monedas de plata",
-        () => `${Math.floor(Math.random() * 101) + 50} monedas de plata`, // 50-150 plata
-        "Escudo ligero",
-        "Escudo pesado",
-        "Armadura de cuero",
-        "Armadura de placas ligera",
-        "Bolsa de hierbas curativas"
+        { nombre: "Capa de sigilo", tipo: "Objeto maravilloso", raridad: "Poco común", efecto: "Ventaja en DEX (Sigilo)" },
+        { nombre: "Capa de resistencia al fuego", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Resistencia a daño de fuego" },
+        { nombre: "Botas de velocidad", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Duplica la velocidad de movimiento" },
+        { nombre: "Botas de sigilo", tipo: "Objeto maravilloso", raridad: "Poco común", efecto: "+5 a DEX (Sigilo)" },
+        { nombre: "Guantes encantados", tipo: "Objeto maravilloso", efecto: "+1 a Fuerza" },
+        { nombre: "Guantes de fuerza", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Fuerza fijada en 19" },
+        { nombre: "Sombrero del sabio", tipo: "Objeto maravilloso", efecto: "+2 a INT mientras se lleve" },
+        { nombre: "Monedas de plata", tipo: "Tesoro" },
+        () => ({ nombre: `${Math.floor(Math.random() * 101) + 50} monedas de plata`, tipo: "Tesoro" }),
+        { nombre: "Escudo ligero", tipo: "Escudo", bono: "+1 a CA" },
+        { nombre: "Escudo pesado", tipo: "Escudo", bono: "+2 a CA" },
+        { nombre: "Armadura de cuero", tipo: "Armadura ligera", CA: "11 + DES" },
+        { nombre: "Armadura de placas ligera", tipo: "Armadura pesada", CA: "16" },
+        { nombre: "Bolsa de hierbas curativas", tipo: "Consumible", efecto: "Cura 1d8 PV" }
     ],
     mesa: [
-        "Libro de hechizos",
-        "Varita mágica",
-        "Varita de hielo",
-        "Pluma de ave rara",
-        "Pergamino antiguo",
-        "Piedra misteriosa",
-        "Pergamino de invocación",
-        "Bolsa de componentes mágicos",
-        "Pequeño relicario",
-        () => `${Math.floor(Math.random() * 21) + 5} monedas de oro`, // 5-25 oro
-        "Cristal encantado",
-        "Amuleto de protección",
-        "Tintero mágico",
-        "Mapa del reino"
+        { nombre: "Libro de hechizos", tipo: "Objeto", efecto: "Contiene 1d6 conjuros aleatorios" },
+        { nombre: "Varita mágica", tipo: "Varita", efecto: "Lanza un conjuro aleatorio (niv 1)" },
+        { nombre: "Varita de hielo", tipo: "Varita", raridad: "Raro", efecto: "Lanza Rayo de Escarcha (cantrip)" },
+        { nombre: "Pluma de ave rara", tipo: "Objeto", efecto: "Material valioso (10 po)" },
+        { nombre: "Pergamino antiguo", tipo: "Conjuro", efecto: "Nivel 1 aleatorio" },
+        { nombre: "Piedra misteriosa", tipo: "Objeto", efecto: "Brilla cuando hay magia cerca" },
+        { nombre: "Pergamino de invocación", tipo: "Conjuro", efecto: "Invoca criatura CR 2" },
+        { nombre: "Bolsa de componentes mágicos", tipo: "Objeto", efecto: "Necesario para lanzar conjuros" },
+        { nombre: "Pequeño relicario", tipo: "Objeto religioso", efecto: "Protección menor contra no-muertos" },
+        () => ({ nombre: `${Math.floor(Math.random() * 21) + 5} monedas de oro`, tipo: "Tesoro" }),
+        { nombre: "Cristal encantado", tipo: "Objeto", efecto: "+1 a CD de conjuros al usarse como foco" },
+        { nombre: "Amuleto de protección", tipo: "Objeto maravilloso", raridad: "Poco común", efecto: "Ventaja en 1 tirada de salvación al día" },
+        { nombre: "Tintero mágico", tipo: "Objeto", efecto: "No se acaba nunca" },
+        { nombre: "Mapa del reino", tipo: "Objeto", efecto: "Aumenta la velocidad de viaje un 25%" }
     ]
 };
 
@@ -96,10 +96,25 @@ function mostrarDadoYLoot(tipo) {
         const lootArray = lootPorObjeto[tipo];
         let loot = lootArray[Math.floor(Math.random() * lootArray.length)];
 
-        // Si el loot es función, ejecutarla (para oro/gemas aleatorias)
+        // Si es función, ejecutarla
         if (typeof loot === "function") loot = loot();
 
-        lootDiv.textContent = `¡Has encontrado: ${loot}!`;
+        // Si es objeto con stats
+        if (typeof loot === "object") {
+            let texto = `¡Has encontrado: ${loot.nombre}!`;
+            if (loot.tipo) texto += `\nTipo: ${loot.tipo}`;
+            if (loot.raridad) texto += `\nRaridad: ${loot.raridad}`;
+            if (loot.bono) texto += `\nBono: ${loot.bono}`;
+            if (loot.efecto) texto += `\nEfecto: ${loot.efecto}`;
+            if (loot.daño) texto += `\nDaño: ${loot.daño}`;
+            if (loot.propiedades) texto += `\nPropiedades: ${loot.propiedades}`;
+            if (loot.CA) texto += `\nCA: ${loot.CA}`;
+            if (loot.nivel) texto += `\nNivel de conjuro: ${loot.nivel}`;
+            lootDiv.textContent = texto;
+        } else {
+            lootDiv.textContent = `¡Has encontrado: ${loot}!`;
+        }
+
         dadoImg.style.display = "none";
     }, 1000); // duración de la animación
 }
