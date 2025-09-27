@@ -1,71 +1,174 @@
 // Loot ampliado y aleatorio por tipo de objeto (con stats)
+// Probabilidades por rareza
+const rarezaProbabilidades = {
+    "común": 0.55,        // Verde
+    "poco común": 0.22,   // Azul
+    "raro": 0.13,         // Morado
+    "muy raro": 0.07,     // Rojo
+    "otro": 0.03          // Dorado
+};
+
+// Función para elegir loot según rareza
+function elegirLootPorRareza(pool) {
+    const grupos = {
+        "común": [],
+        "poco común": [],
+        "raro": [],
+        "muy raro": [],
+        "otro": []
+    };
+    pool.forEach(obj => {
+        let r = (obj.raridad || "común").toLowerCase();
+        if (!grupos[r]) r = "otro";
+        grupos[r].push(obj);
+    });
+    const rand = Math.random();
+    let acumulado = 0;
+    let elegida = "común";
+    for (const [rar, prob] of Object.entries(rarezaProbabilidades)) {
+        acumulado += prob;
+        if (rand < acumulado) {
+            elegida = rar;
+            break;
+        }
+    }
+    let grupo = grupos[elegida];
+    if (grupo.length === 0) {
+        grupo = grupos["común"].length ? grupos["común"] : pool;
+    }
+    return grupo[Math.floor(Math.random() * grupo.length)];
+}
+
 const lootPorObjeto = {
     cofre: [
-        { nombre: "Espada +1", tipo: "Arma (espada larga)", raridad: "Poco común", bono: "+1 a tiradas de ataque y daño" },
-        { nombre: "Espada larga +2", tipo: "Arma (espada larga)", raridad: "Raro", bono: "+2 a tiradas de ataque y daño" },
-        { nombre: "Espada corta encantada", tipo: "Arma (espada corta)", raridad: "Poco común", bono: "+1 a ataque", efecto: "Brilla en la oscuridad (6m)" },
-        { nombre: "Hacha de batalla", tipo: "Arma marcial", daño: "1d8 cortante", propiedades: "Versátil (1d10)", raridad: "Común" },
-        { nombre: "Maza de acero", tipo: "Arma simple", daño: "1d6 contundente", raridad: "Común" },
-        { nombre: "Anillo de invisibilidad", tipo: "Objeto maravilloso", raridad: "Legendario", efecto: "Otorga invisibilidad hasta que se ataque o lance un conjuro" },
-        { nombre: "Anillo de protección", tipo: "Objeto maravilloso", raridad: "Raro", bono: "+1 a CA y salvaciones" },
-        { nombre: "Amuleto de salud", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Fija la Constitución del portador en 19" },
-        { nombre: "Pergamino de fuego", tipo: "Conjuro (Bola de Fuego)", nivel: 3, raridad: "Poco común" },
-        { nombre: "Pergamino de teletransportación", tipo: "Conjuro (Teleport)", nivel: 7, raridad: "Muy raro" },
-        { nombre: "Poción de fuerza", tipo: "Poción", raridad: "Raro", efecto: "Aumenta la Fuerza a 21 por 1 hora" },
-        { nombre: "Capa de resistencia", tipo: "Objeto maravilloso", raridad: "Poco común", bono: "+1 a salvaciones" },
-        () => ({ nombre: `${Math.floor(Math.random() * 201) + 50} monedas de oro`, tipo: "Tesoro" }),
-        () => ({ nombre: `${Math.floor(Math.random() * 101) + 50} gemas preciosas`, tipo: "Tesoro" }),
-        { nombre: "Botella de elixir de vida", tipo: "Poción", raridad: "Muy raro", efecto: "Restaura 50 PV al beber" },
-        { nombre: "Escudo mágico", tipo: "Escudo", raridad: "Poco común", bono: "+1 a CA" },
-        { nombre: "Collar de sabiduría", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "+2 a Sabiduría mientras se lleve" }
+        { nombre: "Espada larga", tipo: "Arma (espada)", raridad: "común", bono: "+0 a ataque" },
+        { nombre: "Hacha de batalla", tipo: "Arma (hacha)", raridad: "común", bono: "+0 a ataque" },
+        { nombre: "Daga de acero", tipo: "Arma (daga)", raridad: "común", bono: "+0 a ataque" },
+        { nombre: "Arco corto", tipo: "Arma (arco)", raridad: "común", bono: "+0 a ataque" },
+        { nombre: "Martillo de guerra", tipo: "Arma (martillo)", raridad: "común", bono: "+0 a ataque" },
+        { nombre: "Escudo de madera", tipo: "Escudo", raridad: "común", bono: "+1 a CA" },
+        { nombre: "Armadura de cuero", tipo: "Armadura ligera", raridad: "común", CA: "11 + DES" },
+        { nombre: "Armadura de malla", tipo: "Armadura media", raridad: "poco común", CA: "14 + DES (máx 2)" },
+        { nombre: "Espada corta mágica", tipo: "Arma (espada)", raridad: "poco común", bono: "+1 a ataque" },
+        { nombre: "Hacha de batalla mágica", tipo: "Arma (hacha)", raridad: "poco común", bono: "+1 a ataque" },
+        { nombre: "Daga venenosa", tipo: "Arma (daga)", raridad: "raro", bono: "+1 a ataque", efecto: "Inflige 1d4 veneno" },
+        { nombre: "Arco largo élfico", tipo: "Arma (arco)", raridad: "raro", bono: "+2 a ataque" },
+        { nombre: "Martillo de guerra enano", tipo: "Arma (martillo)", raridad: "raro", bono: "+2 a ataque" },
+        { nombre: "Escudo de mithril", tipo: "Escudo", raridad: "muy raro", bono: "+2 a CA" },
+        { nombre: "Armadura de placas", tipo: "Armadura pesada", raridad: "muy raro", CA: "18" },
+        { nombre: "Espada flamígera", tipo: "Arma (espada)", raridad: "muy raro", bono: "+2 a ataque", efecto: "Inflige 1d6 fuego extra" },
+        { nombre: "Hacha vorpal", tipo: "Arma (hacha)", raridad: "otro", bono: "+3 a ataque", efecto: "Decapita con crítico" },
+        { nombre: "Daga de sombra", tipo: "Arma (daga)", raridad: "otro", bono: "+3 a ataque", efecto: "Invisibilidad al atacar" },
+        { nombre: "Anillo de protección", tipo: "Objeto maravilloso", raridad: "raro", bono: "+1 a CA y salvaciones" },
+        { nombre: "Amuleto de salud", tipo: "Objeto maravilloso", raridad: "raro", efecto: "Constitución 19" },
+        { nombre: "Pergamino de bola de fuego", tipo: "Conjuro", raridad: "poco común", nivel: 3 },
+        { nombre: "Pergamino de teleportación", tipo: "Conjuro", raridad: "muy raro", nivel: 7 },
+        { nombre: "Poción de fuerza gigante", tipo: "Poción", raridad: "raro", efecto: "Fuerza 21 por 1 hora" },
+        { nombre: "Capa de resistencia", tipo: "Objeto maravilloso", raridad: "poco común", bono: "+1 a salvaciones" },
+        () => ({ nombre: `${Math.floor(Math.random() * 201) + 50} monedas de oro`, tipo: "Tesoro", raridad: "común" })
     ],
     alacena: [
-        { nombre: "Pan mágico", tipo: "Comida", efecto: "Recupera 1d6 PV" },
-        { nombre: "Poción de curación", tipo: "Poción", efecto: "Cura 2d4+2 PV" },
-        { nombre: "Poción de invisibilidad", tipo: "Poción", raridad: "Raro", efecto: "Invisibilidad 1h o hasta atacar" },
-        { nombre: "Poción de velocidad", tipo: "Poción", raridad: "Muy raro", efecto: "Duplica velocidad, +2 CA, ventaja en DEX por 1 min" },
-        { nombre: "Llave antigua", tipo: "Objeto", efecto: "Abre un cofre olvidado" },
-        { nombre: "Mapa del tesoro", tipo: "Objeto", efecto: "Señala una localización secreta" },
-        { nombre: "Frasco de aceite sagrado", tipo: "Consumible", efecto: "Inflige 2d6 radiante a no-muertos" },
-        { nombre: "Hierbas curativas", tipo: "Consumible", efecto: "Cura 1d4 PV" },
-        { nombre: "Botella de vino élfico", tipo: "Objeto", efecto: "Valioso, puede venderse (25 po)" },
-        { nombre: "Pergamino antiguo", tipo: "Objeto", efecto: "Contiene un conjuro menor aleatorio" },
-        () => ({ nombre: `${Math.floor(Math.random() * 51) + 10} monedas de oro`, tipo: "Tesoro" }),
-        { nombre: "Frasco de veneno", tipo: "Consumible", efecto: "Añadir al arma: 1d4 veneno" },
-        { nombre: "Polvo de sueño", tipo: "Consumible", efecto: "Induce sueño (CD 13)" },
-        { nombre: "Set de componentes mágicos", tipo: "Objeto", efecto: "Útil para lanzar conjuros" }
+        { nombre: "Pan élfico", tipo: "Comida", raridad: "común", efecto: "Recupera 1d6 PV" },
+        { nombre: "Queso curado", tipo: "Comida", raridad: "común", efecto: "Recupera 1d4 PV" },
+        { nombre: "Frutas exóticas", tipo: "Comida", raridad: "común", efecto: "Recupera 1d4 PV" },
+        { nombre: "Hierbas curativas", tipo: "Consumible", raridad: "común", efecto: "Cura 1d4 PV" },
+        { nombre: "Botella de vino élfico", tipo: "Objeto", raridad: "común", efecto: "Valioso, puede venderse (25 po)" },
+        { nombre: "Frasco de miel", tipo: "Comida", raridad: "común", efecto: "Recupera 1d4 PV" },
+        { nombre: "Set de componentes mágicos", tipo: "Objeto", raridad: "común", efecto: "Útil para lanzar conjuros" },
+        { nombre: "Llave antigua", tipo: "Objeto", raridad: "común", efecto: "Abre un cofre olvidado" },
+        { nombre: "Mapa del tesoro", tipo: "Objeto", raridad: "poco común", efecto: "Señala una localización secreta" },
+        { nombre: "Frasco de aceite sagrado", tipo: "Consumible", raridad: "raro", efecto: "Inflige 2d6 radiante a no-muertos" },
+        { nombre: "Frasco de veneno", tipo: "Consumible", raridad: "raro", efecto: "Añadir al arma: 1d4 veneno" },
+        { nombre: "Polvo de sueño", tipo: "Consumible", raridad: "raro", efecto: "Induce sueño (CD 13)" },
+        { nombre: "Poción de curación", tipo: "Poción", raridad: "poco común", efecto: "Cura 2d4+2 PV" },
+        { nombre: "Poción de invisibilidad", tipo: "Poción", raridad: "raro", efecto: "Invisibilidad 1h o hasta atacar" },
+        { nombre: "Poción de velocidad", tipo: "Poción", raridad: "muy raro", efecto: "Duplica velocidad, +2 CA, ventaja en DEX por 1 min" },
+        { nombre: "Poción de restauración mayor", tipo: "Poción", raridad: "otro", efecto: "Restaura todos los PV" },
+        { nombre: "Pergamino antiguo", tipo: "Objeto", raridad: "poco común", efecto: "Contiene un conjuro menor aleatorio" },
+        { nombre: "Bolsa de especias raras", tipo: "Objeto", raridad: "poco común", efecto: "Valioso para alquimia" },
+        { nombre: "Frasco de agua bendita", tipo: "Consumible", raridad: "raro", efecto: "Inflige 2d6 daño a demonios" },
+        { nombre: "Caja de galletas mágicas", tipo: "Comida", raridad: "común", efecto: "Recupera 1d4 PV" },
+        { nombre: "Frasco de poción de sueño", tipo: "Poción", raridad: "raro", efecto: "Induce sueño profundo" },
+        { nombre: "Bolsa de semillas mágicas", tipo: "Objeto", raridad: "poco común", efecto: "Crecen plantas curativas" },
+        { nombre: "Frasco de poción de resistencia", tipo: "Poción", raridad: "poco común", efecto: "Ventaja en salvaciones por 1h" },
+        { nombre: "Caja de té de dragón", tipo: "Comida", raridad: "raro", efecto: "Cura 2d8 PV" },
+        () => ({ nombre: `${Math.floor(Math.random() * 51) + 10} monedas de oro`, tipo: "Tesoro", raridad: "común" })
     ],
     armario: [
-        { nombre: "Capa de sigilo", tipo: "Objeto maravilloso", raridad: "Poco común", efecto: "Ventaja en DEX (Sigilo)" },
-        { nombre: "Capa de resistencia al fuego", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Resistencia a daño de fuego" },
-        { nombre: "Botas de velocidad", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Duplica la velocidad de movimiento" },
-        { nombre: "Botas de sigilo", tipo: "Objeto maravilloso", raridad: "Poco común", efecto: "+5 a DEX (Sigilo)" },
-        { nombre: "Guantes encantados", tipo: "Objeto maravilloso", efecto: "+1 a Fuerza" },
-        { nombre: "Guantes de fuerza", tipo: "Objeto maravilloso", raridad: "Raro", efecto: "Fuerza fijada en 19" },
-        { nombre: "Sombrero del sabio", tipo: "Objeto maravilloso", efecto: "+2 a INT mientras se lleve" },
-        { nombre: "Monedas de plata", tipo: "Tesoro" },
-        () => ({ nombre: `${Math.floor(Math.random() * 101) + 50} monedas de plata`, tipo: "Tesoro" }),
-        { nombre: "Escudo ligero", tipo: "Escudo", bono: "+1 a CA" },
-        { nombre: "Escudo pesado", tipo: "Escudo", bono: "+2 a CA" },
-        { nombre: "Armadura de cuero", tipo: "Armadura ligera", CA: "11 + DES" },
-        { nombre: "Armadura de placas ligera", tipo: "Armadura pesada", CA: "16" },
-        { nombre: "Bolsa de hierbas curativas", tipo: "Consumible", efecto: "Cura 1d8 PV" }
+        { nombre: "Capa de viajero", tipo: "Objeto maravilloso", raridad: "común", efecto: "Ventaja en DEX (Sigilo)" },
+        { nombre: "Botas de cuero", tipo: "Objeto maravilloso", raridad: "común", efecto: "Resistencia al frío" },
+        { nombre: "Guantes de trabajo", tipo: "Objeto maravilloso", raridad: "común", efecto: "Mejora trabajos manuales" },
+        { nombre: "Sombrero de ala ancha", tipo: "Objeto maravilloso", raridad: "común", efecto: "Protege del sol" },
+        { nombre: "Collar de cuentas", tipo: "Objeto maravilloso", raridad: "común", efecto: "Decorativo" },
+        { nombre: "Capa de invisibilidad", tipo: "Objeto maravilloso", raridad: "muy raro", efecto: "Otorga invisibilidad" },
+        { nombre: "Botas de velocidad", tipo: "Objeto maravilloso", raridad: "poco común", efecto: "Duplica la velocidad de movimiento" },
+        { nombre: "Guantes de fuerza", tipo: "Objeto maravilloso", raridad: "raro", efecto: "+1 a Fuerza" },
+        { nombre: "Sombrero de sabiduría", tipo: "Objeto maravilloso", raridad: "raro", efecto: "+2 a INT mientras se lleve" },
+        { nombre: "Collar de protección", tipo: "Objeto maravilloso", raridad: "poco común", efecto: "+1 a salvaciones" },
+        { nombre: "Escudo ligero", tipo: "Escudo", raridad: "poco común", bono: "+1 a CA" },
+        { nombre: "Escudo pesado", tipo: "Escudo", raridad: "raro", bono: "+2 a CA" },
+        { nombre: "Armadura de cuero reforzada", tipo: "Armadura ligera", raridad: "poco común", CA: "12 + DES" },
+        { nombre: "Armadura de placas ligera", tipo: "Armadura pesada", raridad: "raro", CA: "16" },
+        { nombre: "Bolsa de hierbas curativas", tipo: "Consumible", raridad: "común", efecto: "Cura 1d8 PV" },
+        { nombre: "Capa de resistencia elemental", tipo: "Objeto maravilloso", raridad: "raro", efecto: "Resistencia a un elemento" },
+        { nombre: "Botas de salto", tipo: "Objeto maravilloso", raridad: "poco común", efecto: "Salto triple" },
+        { nombre: "Guantes de ladrón", tipo: "Objeto maravilloso", raridad: "poco común", efecto: "Ventaja en abrir cerraduras" },
+        { nombre: "Sombrero de disfraz", tipo: "Objeto maravilloso", raridad: "raro", efecto: "Permite cambiar apariencia" },
+        { nombre: "Collar de sabiduría", tipo: "Objeto maravilloso", raridad: "raro", efecto: "+2 a Sabiduría" },
+        { nombre: "Escudo de dragón", tipo: "Escudo", raridad: "muy raro", bono: "+3 a CA", efecto: "Resistencia al fuego" },
+        { nombre: "Armadura de escamas de dragón", tipo: "Armadura pesada", raridad: "otro", CA: "19", efecto: "Resistencia a daño" },
+        { nombre: "Capa de vuelo", tipo: "Objeto maravilloso", raridad: "muy raro", efecto: "Permite volar por 10 minutos" },
+        { nombre: "Botas de sigilo", tipo: "Objeto maravilloso", raridad: "raro", efecto: "Ventaja en sigilo" },
+        () => ({ nombre: `${Math.floor(Math.random() * 101) + 50} monedas de plata`, tipo: "Tesoro", raridad: "común" })
     ],
     mesa: [
-        { nombre: "Libro de hechizos", tipo: "Objeto", efecto: "Contiene 1d6 conjuros aleatorios" },
-        { nombre: "Varita mágica", tipo: "Varita", efecto: "Lanza un conjuro aleatorio (niv 1)" },
-        { nombre: "Varita de hielo", tipo: "Varita", raridad: "Raro", efecto: "Lanza Rayo de Escarcha (cantrip)" },
-        { nombre: "Pluma de ave rara", tipo: "Objeto", efecto: "Material valioso (10 po)" },
-        { nombre: "Pergamino antiguo", tipo: "Conjuro", efecto: "Nivel 1 aleatorio" },
-        { nombre: "Piedra misteriosa", tipo: "Objeto", efecto: "Brilla cuando hay magia cerca" },
-        { nombre: "Pergamino de invocación", tipo: "Conjuro", efecto: "Invoca criatura CR 2" },
-        { nombre: "Bolsa de componentes mágicos", tipo: "Objeto", efecto: "Necesario para lanzar conjuros" },
-        { nombre: "Pequeño relicario", tipo: "Objeto religioso", efecto: "Protección menor contra no-muertos" },
-        () => ({ nombre: `${Math.floor(Math.random() * 21) + 5} monedas de oro`, tipo: "Tesoro" }),
-        { nombre: "Cristal encantado", tipo: "Objeto", efecto: "+1 a CD de conjuros al usarse como foco" },
-        { nombre: "Amuleto de protección", tipo: "Objeto maravilloso", raridad: "Poco común", efecto: "Ventaja en 1 tirada de salvación al día" },
-        { nombre: "Tintero mágico", tipo: "Objeto", efecto: "No se acaba nunca" },
-        { nombre: "Mapa del reino", tipo: "Objeto", efecto: "Aumenta la velocidad de viaje un 25%" }
+        { nombre: "Libro de conjuros", tipo: "Objeto", raridad: "común", efecto: "Contiene conjuros de nivel 1" },
+        { nombre: "Varita de luz", tipo: "Varita", raridad: "común", efecto: "Produce luz mágica" },
+        { nombre: "Cristal de enfoque", tipo: "Objeto", raridad: "poco común", efecto: "+1 a CD de conjuros" },
+        { nombre: "Amuleto de protección", tipo: "Objeto maravilloso", raridad: "poco común", efecto: "+1 a salvaciones" },
+        { nombre: "Mapa mágico", tipo: "Objeto", raridad: "raro", efecto: "Revela ubicación de tesoros" },
+        { nombre: "Pluma de ave rara", tipo: "Objeto", raridad: "común", efecto: "Material valioso (10 po)" },
+        { nombre: "Pergamino de invocación", tipo: "Conjuro", raridad: "raro", efecto: "Invoca criatura CR 2" },
+        { nombre: "Bolsa de componentes mágicos", tipo: "Objeto", raridad: "común", efecto: "Necesario para lanzar conjuros" },
+        { nombre: "Pequeño relicario", tipo: "Objeto religioso", raridad: "común", efecto: "Protección menor contra no-muertos" },
+        { nombre: "Tintero mágico", tipo: "Objeto", raridad: "común", efecto: "No se acaba nunca" },
+        { nombre: "Reloj de arena encantado", tipo: "Objeto", raridad: "raro", efecto: "Controla el tiempo por 1 minuto" },
+        { nombre: "Lámpara de escritorio mágica", tipo: "Objeto", raridad: "común", efecto: "Ilumina con luz mágica" },
+        { nombre: "Bolsa de polvo de inspiración", tipo: "Consumible", raridad: "poco común", efecto: "Ventaja en la próxima tirada de habilidad" },
+        () => ({ nombre: `${Math.floor(Math.random() * 21) + 5} monedas de oro`, tipo: "Tesoro", raridad: "común" })
+    ],
+    escritorio: [
+        { nombre: "Pluma mágica", tipo: "Herramienta", raridad: "común", efecto: "Escribe sin gastar tinta" },
+        { nombre: "Set de escritura", tipo: "Herramienta", raridad: "común", efecto: "Permite escribir cartas mágicas" },
+        { nombre: "Libro de recetas mágicas", tipo: "Libro", raridad: "poco común", efecto: "Recetas para pociones raras" },
+        { nombre: "Caja de sellos", tipo: "Herramienta", raridad: "común", efecto: "Sella documentos con magia" },
+        { nombre: "Reloj de arena encantado", tipo: "Objeto", raridad: "raro", efecto: "Controla el tiempo por 1 minuto" },
+        { nombre: "Lámpara de escritorio mágica", tipo: "Objeto", raridad: "común", efecto: "Ilumina con luz mágica" },
+        { nombre: "Bolsa de polvo de inspiración", tipo: "Consumible", raridad: "poco común", efecto: "Ventaja en la próxima tirada de habilidad" },
+        { nombre: "Diario secreto", tipo: "Libro", raridad: "raro", efecto: "Contiene secretos mágicos" },
+        { nombre: "Mapa de rutas ocultas", tipo: "Mapa", raridad: "raro", efecto: "Revela caminos secretos" },
+        { nombre: "Pergamino de protección", tipo: "Pergamino", raridad: "muy raro", efecto: "Protege contra daño por 1 minuto" },
+        { nombre: "Amuleto de concentración", tipo: "Amuleto", raridad: "poco común", efecto: "Ventaja en concentración" },
+        { nombre: "Caja de tinta eterna", tipo: "Herramienta", raridad: "común", efecto: "Nunca se agota" },
+        { nombre: "Libro de historia antigua", tipo: "Libro", raridad: "común", efecto: "Información valiosa" },
+        () => ({ nombre: `${Math.floor(Math.random() * 31) + 10} monedas de oro`, tipo: "Tesoro", raridad: "común" })
+    ],
+    cama: [
+        { nombre: "Almohada de plumas", tipo: "Objeto", raridad: "común", efecto: "Descanso confortable, recupera 1d4 PV" },
+        { nombre: "Manta cálida", tipo: "Objeto", raridad: "común", efecto: "Protege contra frío" },
+        { nombre: "Colchón mullido", tipo: "Objeto", raridad: "común", efecto: "Recupera 1d4 PV extra al dormir" },
+        { nombre: "Sábana limpia", tipo: "Objeto", raridad: "común", efecto: "Mejora descanso" },
+        { nombre: "Cojín decorativo", tipo: "Objeto", raridad: "común", efecto: "Decorativo" },
+        { nombre: "Frasco de sueños", tipo: "Consumible", raridad: "raro", efecto: "Induce sueños lúcidos" },
+        { nombre: "Caja de música mágica", tipo: "Objeto", raridad: "poco común", efecto: "Relaja y cura estrés" },
+        { nombre: "Cortina de protección", tipo: "Objeto", raridad: "común", efecto: "Bloquea la luz y el sonido" },
+        { nombre: "Amuleto de descanso", tipo: "Amuleto", raridad: "raro", efecto: "Duplica la recuperación durante el sueño" },
+        { nombre: "Bolsa de plumas mágicas", tipo: "Consumible", raridad: "común", efecto: "Cura 1d6 PV" },
+        { nombre: "Manta de protección mágica", tipo: "Objeto", raridad: "poco común", efecto: "Resistencia a daño psíquico" },
+        { nombre: "Colchón de sueños proféticos", tipo: "Objeto", raridad: "raro", efecto: "Sueños proféticos" },
+        { nombre: "Sábana de regeneración", tipo: "Objeto", raridad: "muy raro", efecto: "Regenera todos los PV al dormir" },
+        { nombre: "Cojín de inspiración divina", tipo: "Objeto", raridad: "otro", efecto: "Otorga inspiración divina" },
+        () => ({ nombre: `${Math.floor(Math.random() * 21) + 5} monedas de oro`, tipo: "Tesoro", raridad: "común" })
     ]
 };
 

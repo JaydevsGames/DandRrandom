@@ -9,17 +9,18 @@ body {
 button.objeto {
     padding: 10px 20px;
     margin: 10px;
-    font-size: 1.2em;
+    font-size: 1.5em;
+    font-family:'MedievalSharp', cursive; font-size: 1.3em; 
     cursor: pointer;
-    border: 2px solid #5f0059;
+    border: 2px solid #845400;
     border-radius: 8px;
     background: #333;
-    color: white;
+    color: rgb(255, 244, 182);
     transition: background 0.3s;
 }
 
 button.objeto:hover {
-    background: #7c0063
+    background: #433200
     
 }
 
@@ -88,17 +89,6 @@ button.objeto:hover {
 }
 
 
-
-
-
-
-
-
-@keyframes parpadeo {
-    from { opacity: 1; }
-    to { opacity: 0.7; }
-}
-
 footer.footer {
     position: fixed;
     bottom: 0;
@@ -107,7 +97,7 @@ footer.footer {
 
     padding: 10px;
     background: #1e1e1e;
-    border-top: 2px solid #5f0059;
+    border-top: 2px solid #724f03;
     font-size: 0.9em;
     color: #bbb;
     text-align: center;
